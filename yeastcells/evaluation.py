@@ -124,7 +124,9 @@ def get_track_performance(pred_t, gt_t, output, pipeline='maskrcnn'):
         "join": join, "split": split
     }
 
-def calculate_metrics(results, pred, gt):
+
+import warnings
+def calculate_metrics(results, *args):
     '''
     Calculate 4 standard performance metrics using performance indicators.
     Parameters
@@ -132,17 +134,15 @@ def calculate_metrics(results, pred, gt):
     results : dict
         Contains 5 performance indicators: 
         true positives (tp), false positives (fp), false negatives (fn), 
-        joined tracks (join), split tracks (split).
-    pred : ndarray
-        Array with segmentation or tracking predictions.
-    gt : ndarray
-        Array with segmentation or tracking ground truth.
+        joined tracks (join), split tracks (split)
     Returns
     -------
     dict
         Performance metrics outcomes for 
         F1-score, accuracy, precision and recall.
     '''
+    if len(args) > 0:
+        warnings.warn(f"Ignored arguments, allowed for compatibility: {args}", DeprecationWarning)
     precision = results["tp"]/(results["tp"]+results["fp"])
     recall = results["tp"]/(results["tp"]+results["fn"])
     accuracy = results["tp"]/(results["tp"]+results["fp"]+results["fn"])
